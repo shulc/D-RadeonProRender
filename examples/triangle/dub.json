@@ -1,0 +1,14 @@
+{
+    "name": "triangle",
+    "description": "Smoke test for bindbc-rpr: load Northstar, render one triangle, save PNG.",
+    "license": "BSL-1.0",
+    "authors": ["Alexander Shagarov"],
+
+    "targetType": "executable",
+    "mainSourceFile": "source/app.d",
+    "sourcePaths": ["source"],
+
+    "dependencies": {
+        "bindbc-rpr": { "path": "../../" }
+    }
+}

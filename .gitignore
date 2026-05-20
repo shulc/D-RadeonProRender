@@ -1,0 +1,20 @@
+.dub
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.pdb
+lib/
+bin/
+__pycache__/
+*.pyc
+
+# example artifacts
+examples/triangle/triangle
+examples/*/triangle.png
+examples/*/*.exe
+examples/*/cache/
+dub.selections.json

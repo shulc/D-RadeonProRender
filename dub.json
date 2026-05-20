@@ -1,0 +1,30 @@
+{
+    "name": "bindbc-rpr",
+    "description": "D bindings for AMD Radeon ProRender SDK (Apache 2.0). bindbc-style — dynamic loading via dlopen/LoadLibrary by default; opt-in static binding behind version=BindRPR_Static.",
+    "license": "BSL-1.0",
+    "authors": ["Alexander Shagarov"],
+
+    "targetType": "library",
+    "targetPath": "lib",
+
+    "sourcePaths": ["source"],
+    "importPaths": ["source"],
+
+    "dependencies": {
+        "bindbc-common": "~>1.0.5",
+        "bindbc-loader": "~>1.1.5"
+    },
+
+    "configurations": [
+        {
+            "name": "dynamic",
+            "comment": "Default. Runtime dlopen of libRadeonProRender64.so via bindbc-loader."
+        },
+        {
+            "name": "static",
+            "comment": "Direct link against libRadeonProRender64 at compile time.",
+            "versions": ["BindRPR_Static"],
+            "libs": ["RadeonProRender64"]
+        }
+    ]
+}
