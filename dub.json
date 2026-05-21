@@ -15,10 +15,27 @@
         "bindbc-loader": "~>1.1.5"
     },
 
+    "preBuildCommands-osx": [
+        "cd \"$PACKAGE_DIR\" && git submodule update --init --quiet extern/RadeonProRenderSDK"
+    ],
+    "preBuildCommands-linux": [
+        "cd \"$PACKAGE_DIR\" && git submodule update --init --quiet extern/RadeonProRenderSDK"
+    ],
+    "preBuildCommands-windows": [
+        "git -C \"%PACKAGE_DIR%\" submodule update --init --quiet extern/RadeonProRenderSDK"
+    ],
+
+    "lflags-osx":   ["-rpath", "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binMacOS"],
+    "lflags-linux": ["-rpath", "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binUbuntu20"],
+
+    "copyFiles-windows": [
+        "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binWin64/*.dll"
+    ],
+
     "configurations": [
         {
             "name": "dynamic",
-            "comment": "Default. Runtime dlopen of libRadeonProRender64.so via bindbc-loader."
+            "comment": "Default. Runtime dlopen/LoadLibrary of libRadeonProRender64 via bindbc-loader."
         },
         {
             "name": "static",

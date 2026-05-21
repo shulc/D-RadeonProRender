@@ -1,0 +1,3 @@
+[submodule "extern/RadeonProRenderSDK"]
+	path = extern/RadeonProRenderSDK
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/RadeonProRenderSDK.git
