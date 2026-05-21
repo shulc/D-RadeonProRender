@@ -69,7 +69,16 @@ RPR_PLUGIN_PATH=/path/to/SDK/RadeonProRender/binUbuntu20/libNorthstar64.so \
 ./triangle              # CPU backend, writes triangle.png
 ```
 
-For GPU: `RPR_BACKEND=gpu` plus `RPR_HIPBIN=/path/to/hipbin` (precompiled HIP kernels — separate submodule of the SDK).
+For GPU backends:
+
+| `RPR_BACKEND` | Flags                  | Plugin     | Needs |
+|---------------|------------------------|------------|-------|
+| `cpu`         | `ENABLE_CPU`           | Northstar  | nothing extra — confirmed working |
+| `gpu`         | `ENABLE_GPU0` (HIP)    | Northstar  | `RPR_HIPBIN` pointing at the `hipbin` submodule (`git submodule update --init hipbin`); HIP runtime matched to the GPU vendor (AMD HIP on AMD; HIP-on-CUDA on NVIDIA — *not* the stock Fedora `rocm-runtime` against NVIDIA hardware) |
+| `opencl`      | `ENABLE_GPU0 + ENABLE_OPENCL` | Northstar | NVIDIA / AMD OpenCL driver (works on most distros). Tahoe::Exception currently observed on Northstar+OpenCL — needs investigation |
+| (HybridPro)   | `ENABLE_GPU0`          | HybridPro  | Vulkan + `VK_KHR_acceleration_structure` + `VK_KHR_ray_tracing_pipeline`. Returns RPR_ERROR_INTERNAL_ERROR (-18) on NVIDIA in this test — likely needs AMD-specific Vulkan extensions or explicit interop flag; needs more investigation |
+
+Note on **NVIDIA + Fedora**: with AMD's `rocm-runtime` installed (Fedora default), Northstar's HIP backend tries to call into `libamdhip64.so` against an NVIDIA GPU and segfaults inside `adl::DeviceHIP::initialize` (null function pointer — the HIP-CUDA symbols don't exist in the AMD HIP runtime). The CPU backend is unaffected. For GPU on NVIDIA, use AMD's HIP-on-CUDA build or run inside a ROCm Docker image.
 
 ## License
 

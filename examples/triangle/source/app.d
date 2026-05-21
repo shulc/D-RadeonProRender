@@ -63,11 +63,20 @@ int main(string[] args) {
     ];
 
     rpr_context ctx;
-    // Default to CPU; switch with RPR_BACKEND=gpu (needs hipbin kernels).
+    // Default to CPU. Override with RPR_BACKEND={cpu,gpu,opencl}.
+    //   gpu     — GPU0 via HIP, requires hipbin kernels matching the GPU
+    //             (works out-of-the-box on AMD; NVIDIA needs HIP-on-CUDA runtime).
+    //   opencl  — GPU0 via OpenCL, works universally on NVIDIA/AMD/Intel
+    //             but slower than HIP path; doesn't need hipbin.
+    //   cpu     — CPU fallback (default).
     const backend = environment.get("RPR_BACKEND", "cpu");
-    const rpr_creation_flags flags = (backend == "gpu")
-        ? RPR_CREATION_FLAGS_ENABLE_GPU0
-        : RPR_CREATION_FLAGS_ENABLE_CPU;
+    rpr_creation_flags flags;
+    switch (backend) {
+        case "gpu":    flags = RPR_CREATION_FLAGS_ENABLE_GPU0;                                  break;
+        case "opencl": flags = RPR_CREATION_FLAGS_ENABLE_GPU0 | RPR_CREATION_FLAGS_ENABLE_OPENCL; break;
+        default:       flags = RPR_CREATION_FLAGS_ENABLE_CPU;                                   break;
+    }
+    writefln("Backend: %s (flags=0x%x)", backend, flags);
     check(rprCreateContext(RPR_VERSION_MAJOR_MINOR_REVISION,
                            plugins.ptr, plugins.length,
                            flags, ctxProps.ptr, null, &ctx),
