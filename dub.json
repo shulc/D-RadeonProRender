@@ -25,8 +25,14 @@
         "git -C \"%PACKAGE_DIR%\" submodule update --init --quiet extern/RadeonProRenderSDK"
     ],
 
-    "lflags-osx":   ["-rpath", "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binMacOS"],
-    "lflags-linux": ["-rpath", "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binUbuntu20"],
+    "lflags-osx": [
+        "-rpath", "@executable_path/rpr",
+        "-rpath", "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binMacOS"
+    ],
+    "lflags-linux": [
+        "-rpath=$$ORIGIN/rpr",
+        "-rpath=$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binUbuntu20"
+    ],
 
     "copyFiles-windows": [
         "$PACKAGE_DIR/extern/RadeonProRenderSDK/RadeonProRender/binWin64/*.dll"
